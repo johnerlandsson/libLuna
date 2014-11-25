@@ -1,0 +1,16 @@
+/Tests
+/.metadata
+/ECTest
+/.settings
+/Base/.project
+/Base/.cproject
+/Base/.settings
+/Base/libLBase.so
+/Base/obj
+/EtherCAT/.project
+/EtherCAT/.cproject
+/EtherCAT/.settings
+/EtherCAT/obj
+/EtherCAT/libLEtherCAT.so
+/RemoteSystemsTempFiles
+

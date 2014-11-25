@@ -24,10 +24,24 @@ class EL3161 : public AbstractTerminal
 		virtual ~EL3161();
 		void regPdoEntry( ec_domain_t *domain ) override;
 		void update( uint8_t *domain_pd ) override;
-		Input<uint16_t> getValue();
+		Input<int32_t> getValue();
+		Input<bool> getUnderrange();
+		Input<bool> getOverrange();
+		Input<uint8_t> getLimit1();
+		Input<uint8_t> getLimit2();
+		Input<bool> getError();
+		Input<bool> getTxPdoState();
+		Input<bool> getTxPdoToggle();
 
 	private:
-		IO<uint16_t> _value;
+		IO<int32_t> _value;
+		IO<bool> _underrange;
+		IO<bool> _overrange;
+		IO<uint8_t> _limit1;
+		IO<uint8_t> _limit2;
+		IO<bool> _error;
+		IO<bool> _tx_pdo_state;
+		IO<bool> _tx_pdo_toggle;
 };
 
 } /* namespace luna */

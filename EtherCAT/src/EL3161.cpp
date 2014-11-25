@@ -6,6 +6,7 @@
  */
 
 #include "EL3161.h"
+#include <bitset>
 
 namespace luna
 {
@@ -54,12 +55,65 @@ void EL3161::regPdoEntry( ec_domain_t* domain )
 void EL3161::update( uint8_t* domain_pd )
 {
 	uint8_t *totOffs = domain_pd + _offset;
-	_value.setValue( EC_READ_U16( totOffs + 2 ) );
+
+	_underrange.setValue( EC_READ_BIT( totOffs + 0, 0 ) );
+	_overrange.setValue( EC_READ_BIT( totOffs + 0, 1 ) );
+
+	std::bitset<2> tmp;
+	tmp.set( 0, EC_READ_BIT( totOffs + 0, 2 ) );
+	tmp.set( 1, EC_READ_BIT( totOffs + 0, 3 ) );
+	_limit1.setValue( tmp.to_ulong() );
+
+	tmp.set( 0, EC_READ_BIT( totOffs + 0, 4 ) );
+	tmp.set( 0, EC_READ_BIT( totOffs + 0, 6 ) );
+	_limit2.setValue( tmp.to_ulong() );
+
+	_error.setValue( EC_READ_BIT( totOffs + 0, 8 ) );
+
+	_tx_pdo_state.setValue( EC_READ_BIT( totOffs + 1, 0 ) );
+	_tx_pdo_toggle.setValue( EC_READ_BIT( totOffs + 1, 1 ) );
+
+	_value.setValue( EC_READ_S32( totOffs + 2 ) );
 }
 
-Input<uint16_t> EL3161::getValue()
+Input<int32_t> EL3161::getValue()
 {
 	return _value.toInput();
+}
+
+Input<bool> EL3161::getUnderrange()
+{
+	return _underrange.toInput();
+}
+
+Input<bool> EL3161::getOverrange()
+{
+	return _overrange.toInput();
+}
+
+Input<uint8_t> EL3161::getLimit1()
+{
+	return _limit1.toInput();
+}
+
+Input<uint8_t> EL3161::getLimit2()
+{
+	return _limit2.toInput();
+}
+
+Input<bool> EL3161::getError()
+{
+	return _error.toInput();
+}
+
+Input<bool> EL3161::getTxPdoState()
+{
+	return _tx_pdo_state.toInput();
+}
+
+Input<bool> EL3161::getTxPdoToggle()
+{
+	return _tx_pdo_toggle.toInput();
 }
 
 } /* namespace luna */
