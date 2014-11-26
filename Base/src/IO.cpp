@@ -10,40 +10,16 @@
 #include <sstream>
 #include <bitset>
 
-//TODO debug includes
-#include <iostream>
-
 namespace luna
 {
 
 template<class T>
 IO<T>::IO()
-	  : AbstractHMIVar{ "unnamed" }, _value{ std::make_shared<std::pair<T, std::mutex>>() }, pimpl_{ std::make_shared<IOImpl<T>>() }
-{
-	type_ = determineType();
-}
-
-template<class T>
-IO<T>::IO( const std::string varname )
-	  : AbstractHMIVar{ varname }, _value{ std::make_shared<std::pair<T, std::mutex>>() }, pimpl_{ std::make_shared<IOImpl<T>>() }
-{
-	type_ = determineType();
-}
-
-template<class T>
-IO<T>::IO( const std::string varname, const bool writeable )
-	  : AbstractHMIVar{ varname, writeable }, _value{ std::make_shared<std::pair<T, std::mutex>>() }, pimpl_{ std::make_shared<IOImpl<T>>() }
-{
-	type_ = determineType();
-}
-
-template<class T>
-IO<T>::IO( const IO<T> &other ) : AbstractHMIVar( other ), _value{ other._value }, pimpl_{ other.pimpl_ }
+	  : _value{ std::make_shared<std::pair<T, std::mutex>>() }, pimpl_{ std::make_shared<IOImpl<T>>() }
 {
 }
-
 template<class T>
-IO<T>::IO( const IO<T> &other, std::string new_name ) : AbstractHMIVar( other, new_name ), _value{ other._value }, pimpl_{ other.pimpl_ }
+IO<T>::IO( const IO<T> &other ) :  _value{ other._value }, pimpl_{ other.pimpl_ }
 {
 }
 
@@ -51,12 +27,6 @@ template<class T>
 Input<T> IO<T>::toInput() const
 {
 	return Input<T>( *this );
-}
-
-template<class T>
-Input<T> IO<T>::toInput( std::string new_name )
-{
-	return Input<T>( *this, new_name );
 }
 
 template<class T>
@@ -116,32 +86,6 @@ const std::string IO<T>::stringval() const
 	return std::to_string( _value->first );
 }
 
-template<class T>
-AbstractHMIVar::VarTypes IO<T>::determineType() const
-{
-	if( std::is_same<T, int8_t>::value )
-		return AbstractHMIVar::VarTypes::Int8;
-	else if( std::is_same<T, uint8_t>::value )
-		return AbstractHMIVar::VarTypes::UInt8;
-	else if( std::is_same<T, int16_t>::value )
-		return AbstractHMIVar::VarTypes::Int16;
-	else if( std::is_same<T, uint16_t>::value )
-		return AbstractHMIVar::VarTypes::UInt16;
-	else if( std::is_same<T, int32_t>::value )
-		return AbstractHMIVar::VarTypes::Int32;
-	else if( std::is_same<T, uint32_t>::value )
-		return AbstractHMIVar::VarTypes::UInt32;
-	else if( std::is_same<T, int64_t>::value )
-		return AbstractHMIVar::VarTypes::Int64;
-	else if( std::is_same<T, uint64_t>::value )
-		return AbstractHMIVar::VarTypes::UInt64;
-	else if( std::is_same<T, double>::value )
-		return AbstractHMIVar::VarTypes::Float;
-	else if( std::is_same<T, bool>::value )
-		return AbstractHMIVar::VarTypes::Bool;
-
-	return AbstractHMIVar::VarTypes::Unknown;
-}
 
 template class IO<int8_t>;
 template class IO<uint8_t>;
@@ -157,13 +101,6 @@ template class IO<double>;
 template<class T>
 Input<T>::Input( const IO<T> &io ) : IO<T>{ io }
 {
-	writeable_ = false;
-}
-
-template<class T>
-Input<T>::Input( const IO<T> &io, std::string new_name ) : IO<T>{ io, new_name }
-{
-	writeable_ = false;
 }
 
 template class Input<int8_t>;
