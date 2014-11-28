@@ -126,47 +126,52 @@ void EL3202::update( uint8_t *domain_pd )
 	fValues[1].setValue( (double)values[1].value() / 10.0f );
 }
 
-Input<bool> EL3202::getUnderrangeStatus( unsigned int channel )
+Input<bool> EL3202::getUnderrangeStatus( const unsigned int channel )
 {
 	return underranges[channel].toInput();
 }
 
-Input<bool> EL3202::getOverrangeStatus( unsigned int channel )
+Input<bool> EL3202::getOverrangeStatus( const unsigned int channel )
 {
 	return overranges[channel].toInput();
 }
 
-Input<bool> EL3202::getErrorStatus( unsigned int channel )
+Input<bool> EL3202::getErrorStatus( const unsigned int channel )
 {
 	return errors[channel].toInput();
 }
 
-Input<bool> EL3202::getTxPdoStateStatus( unsigned int channel )
+Input<bool> EL3202::getTxPdoStateStatus( const unsigned int channel )
 {
 	return tx_pdo_states[channel].toInput();
 }
 
-Input<bool> EL3202::getTxPdoToggleStatus( unsigned int channel )
+Input<bool> EL3202::getTxPdoToggleStatus( const unsigned int channel )
 {
 	return tx_pdo_toggles[channel].toInput();
 }
 
-Input<uint8_t> EL3202::getLimit1Status( unsigned int channel )
+Input<uint8_t> EL3202::getLimit1Status( const unsigned int channel )
 {
 	return limits1[channel].toInput();
 }
 
-Input<uint8_t> EL3202::getLimit2Status( unsigned int channel )
+Input<uint8_t> EL3202::getLimit2Status( const unsigned int channel )
 {
 	return limits2[channel].toInput();
 }
 
-Input<int16_t> EL3202::getValue( unsigned int channel )
+Input<int16_t> EL3202::getInput( const unsigned int channel )
 {
 	return values[channel].toInput();
 }
 
-Input<double> EL3202::getFormattedValue( unsigned int channel )
+int16_t EL3202::getValue( const unsigned int channel )
+{
+	return values[channel].value();
+}
+
+Input<double> EL3202::getFormattedValue( const unsigned int channel )
 {
 	return fValues[channel].toInput();
 }

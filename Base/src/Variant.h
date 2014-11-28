@@ -39,6 +39,7 @@ class Variant
 		std::type_index type();
 		int8_t toInt8();
 		uint8_t toUint8();
+		std::vector<int8_t> *value();
 
 	private:
 		std::vector<int8_t> _value;

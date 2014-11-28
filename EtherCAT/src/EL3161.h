@@ -24,7 +24,8 @@ class EL3161 : public AbstractTerminal
 		virtual ~EL3161();
 		void regPdoEntry( ec_domain_t *domain ) override;
 		void update( uint8_t *domain_pd ) override;
-		Input<int32_t> getValue();
+		Input<int32_t> getInput();
+		int32_t getValue();
 		Input<bool> getUnderrange();
 		Input<bool> getOverrange();
 		Input<uint8_t> getLimit1();

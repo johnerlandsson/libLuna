@@ -34,7 +34,6 @@ EL3161::EL3161( Master* master, uint16_t alias, uint16_t position )
 	_pdos = new ec_pdo_info_t;
 	_pdos[0] = { 0x1A00, 11, _channels };
 
-
 	_syncs = new ec_sync_info_t[5];
 	_syncs[0] = { 0, EC_DIR_OUTPUT, 0, nullptr, EC_WD_DISABLE };
 	_syncs[1] = { 1, EC_DIR_INPUT, 0, nullptr, EC_WD_DISABLE };
@@ -65,20 +64,25 @@ void EL3161::update( uint8_t* domain_pd )
 	_limit1.setValue( tmp.to_ulong() );
 
 	tmp.set( 0, EC_READ_BIT( totOffs + 0, 4 ) );
-	tmp.set( 0, EC_READ_BIT( totOffs + 0, 6 ) );
+	tmp.set( 0, EC_READ_BIT( totOffs + 0, 5 ) );
 	_limit2.setValue( tmp.to_ulong() );
 
-	_error.setValue( EC_READ_BIT( totOffs + 0, 8 ) );
+	_error.setValue( EC_READ_BIT( totOffs + 0, 6 ) );
 
-	_tx_pdo_state.setValue( EC_READ_BIT( totOffs + 1, 0 ) );
-	_tx_pdo_toggle.setValue( EC_READ_BIT( totOffs + 1, 1 ) );
+	_tx_pdo_state.setValue( EC_READ_BIT( totOffs + 1, 6 ) );
+	_tx_pdo_toggle.setValue( EC_READ_BIT( totOffs + 1, 7 ) );
 
 	_value.setValue( EC_READ_S32( totOffs + 2 ) );
 }
 
-Input<int32_t> EL3161::getValue()
+Input<int32_t> EL3161::getInput()
 {
 	return _value.toInput();
+}
+
+int32_t EL3161::getValue()
+{
+	return _value.value();
 }
 
 Input<bool> EL3161::getUnderrange()

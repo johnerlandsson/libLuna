@@ -32,6 +32,9 @@ extern "C"
 #endif
 }
 
+#define OFFSET 0
+#define GAIN 1
+
 using namespace std;
 
 //Globals
@@ -101,8 +104,15 @@ int main( int argc, char **argv )
 		signal( SIGTERM, abrt );
 
 		//Open file
-		fstream outp_file;
-		outp_file.open( "data_" + getDateStr() + ".csv" );
+		string filename{ "/tmp/data_" + getDateStr() + ".csv" };
+		cout << "Opening file: " << filename << endl;
+		ofstream outp_file( filename );
+		if( !outp_file.is_open() )
+		{
+			cerr << "Failed to open file." << endl;
+			return 1;
+		}
+
 
 		//Header for csv
 		outp_file << "Data" << endl;
@@ -111,7 +121,11 @@ int main( int argc, char **argv )
 		{
 			chrono::system_clock::time_point cycle_start_time = chrono::system_clock::now();
 
-			outp_file << ain1.getValue().value() << endl;
+			//Calculate value
+			double value = (double)(ain1.getValue() - OFFSET) * (double)GAIN;
+
+			outp_file << value << endl;
+			cout << value << endl;
 			master.updateDomain( &domain );
 
 			std::this_thread::sleep_until( cycle_start_time + cycle_time );
@@ -120,6 +134,8 @@ int main( int argc, char **argv )
 		outp_file.close();
 
 		master.deactivate();
+
+		cout << endl << endl;
 	}
 	catch( const luna::Master::errors &e )
 	{

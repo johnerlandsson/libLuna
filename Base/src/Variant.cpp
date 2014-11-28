@@ -125,4 +125,9 @@ uint8_t Variant::toUint8()
 	return (uint8_t)_value.at( 0 );
 }
 
+std::vector<int8_t> *Variant::value()
+{
+	return &_value;
+}
+
 } /* namespace luna */

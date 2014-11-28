@@ -61,7 +61,7 @@ void IO<int8_t>::setValue( Variant &value )
 		throw errors::TypeMissmatch;
 
 	std::lock_guard<std::mutex> lock( _value->second );
-	_value->first = value.toInt8();
+	_value->first = value.value()->at( 0 );
 }
 
 template<>
@@ -71,7 +71,7 @@ void IO<uint8_t>::setValue( Variant &value )
 		throw errors::TypeMissmatch;
 
 	std::lock_guard<std::mutex> lock( _value->second );
-	_value->first = value.toUint8();
+	_value->first = (uint8_t)value.value()->at( 0 );
 }
 
 template<>
@@ -80,7 +80,10 @@ void IO<int16_t>::setValue( Variant &value )
 	if( value.type() != typeid( _value->first ) )
 		throw errors::TypeMissmatch;
 
+	std::vector<int8_t> *v = value.value();
+
 	std::lock_guard<std::mutex> lock( _value->second );
+	_value->first = (int16_t)(v->at( 0 ) << 8) | v->at( 1 );
 }
 
 template<>
